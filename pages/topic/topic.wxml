@@ -1,0 +1,142 @@
+<!-- pages/topic/topic.wxml -->
+<view class="container">
+  <!-- 顶部导航栏 -->
+  <view class="navbar">
+    <view class="back-btn" bindtap="goBack">
+      <image class="back-icon" src="/assets/icons/back.png"></image>
+    </view>
+    <text class="nav-title">话题详情</text>
+    <view class="nav-placeholder" style="width: 60rpx;"></view>
+  </view>
+
+  <!-- 话题信息卡片 -->
+  <view class="topic-info-card">
+    <view class="gradient-overlay"></view>
+    <text class="topic-name">#{{topicInfo.name}}#</text>
+    
+    <!-- 话题统计数据 -->
+    <view class="topic-stats">
+      <view class="stat-item">
+        <text class="stat-number">{{topicInfo.postCount}}</text>
+        <text class="stat-label">动态</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-number">{{topicInfo.followerCount}}</text>
+        <text class="stat-label">关注</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-number">{{topicInfo.viewCount}}</text>
+        <text class="stat-label">浏览</text>
+      </view>
+    </view>
+    
+    <!-- 话题描述 -->
+    <text class="topic-description">{{topicInfo.description}}</text>
+    
+    <!-- 操作按钮 -->
+    <view class="topic-actions">
+      <view class="follow-btn" bindtap="toggleFollow">
+        {{isFollowing ? '已关注' : '关注话题'}}
+      </view>
+      <view class="share-btn" bindtap="shareTopic">
+        分享
+      </view>
+    </view>
+  </view>
+
+  <!-- 话题内容分类 -->
+  <view class="topic-tabs">
+    <view class="tab-item {{activeTab === 'hot' ? 'active' : ''}}" data-tab="hot" bindtap="switchTab">
+      热门
+    </view>
+    <view class="tab-item {{activeTab === 'latest' ? 'active' : ''}}" data-tab="latest" bindtap="switchTab">
+      最新
+    </view>
+    <view class="tab-item {{activeTab === 'nearby' ? 'active' : ''}}" data-tab="nearby" bindtap="switchTab">
+      附近
+    </view>
+  </view>
+
+  <!-- 话题动态列表 -->
+  <view class="topic-feed-list">
+      <!-- 动态项 -->
+      <block wx:for="{{feedList}}" wx:key="id">
+        <view class="feed-card" catchtap="viewFeedDetail" data-id="{{item.id}}">
+          <view class="gradient-overlay"></view>
+          <!-- 用户信息 -->
+          <view class="feed-header">
+            <image class="user-avatar" src="{{item.user.avatar}}" bindtap="viewUserProfile" data-user-id="{{item.user.id}}" catchtap="stopPropagation"></image>
+            <view class="user-info">
+              <text class="user-name" bindtap="viewUserProfile" data-user-id="{{item.user.id}}" catchtap="stopPropagation">{{item.user.nickname}}</text>
+              <text class="post-time">{{item.postTime}}</text>
+            </view>
+            <view class="more-btn" bindtap="showMoreOptions" data-id="{{item.id}}" catchtap="stopPropagation">
+              <image class="more-icon" src="/assets/icons/more.png"></image>
+            </view>
+          </view>
+          
+          <!-- 动态内容 -->
+          <view class="feed-content">
+            <text class="content-text">{{item.content}}</text>
+            
+            <!-- 话题标签 -->
+            <view class="topic-tags" wx:if="{{item.topics.length > 0}}">
+              <block wx:for="{{item.topics}}" wx:key="index" wx:for-item="topicItem">
+                <view class="topic-tag" bindtap="viewTopic" data-topic="{{topicItem}}" catchtap="stopPropagation">
+                  <text class="topic-text">#{{topicItem}}#</text>
+                </view>
+              </block>
+            </view>
+          </view>
+          
+          <!-- 图片网格 -->
+          <view class="image-grid" wx:if="{{item.images.length > 0}}">
+            <block wx:for="{{item.images}}" wx:key="index" wx:for-item="image">
+              <view class="image-item">
+                <image class="feed-image" src="{{image}}" mode="aspectFill"></image>
+                <view class="image-hover-effect"></view>
+              </view>
+            </block>
+          </view>
+          
+          <!-- 互动栏 -->
+          <view class="interaction-bar">
+            <view class="interaction-item" bindtap="likeFeed" data-id="{{item.id}}" catchtap="stopPropagation">
+              <image class="interaction-icon" src="{{item.isLiked ? '/assets/icons/like_active.png' : '/assets/icons/like.png'}}" mode="aspectFit"></image>
+              <text class="interaction-text">{{item.likeCount}}</text>
+            </view>
+            <view class="interaction-item" bindtap="commentFeed" data-id="{{item.id}}" catchtap="stopPropagation">
+              <image class="interaction-icon" src="/assets/icons/comment.png" mode="aspectFit"></image>
+              <text class="interaction-text">{{item.commentCount}}</text>
+            </view>
+            <view class="interaction-item" bindtap="collectFeed" data-id="{{item.id}}" catchtap="stopPropagation">
+              <image class="interaction-icon" src="{{item.isCollected ? '/assets/icons/collect_active.png' : '/assets/icons/collect.png'}}" mode="aspectFit"></image>
+              <text class="interaction-text">{{item.collectCount}}</text>
+            </view>
+          </view>
+          
+          <!-- 灵魂匹配度 -->
+          <view class="soul-match-container">
+            <image class="soul-match-icon" src="/assets/icons/soulmatch.png" mode="aspectFit"></image>
+            <text class="soul-match-text">灵魂匹配度</text>
+            <text class="soul-match-percentage">{{item.soulMatch}}%</text>
+          </view>
+        </view>
+      </block>
+    
+    <!-- 加载状态 -->
+    <view class="loading" wx:if="{{loading && feedList.length === 0}}">
+      <text>加载中...</text>
+    </view>
+    
+    <!-- 没有更多内容 -->
+    <view class="no-more" wx:if="{{!hasMore && feedList.length > 0}}">
+      没有更多内容了
+    </view>
+    
+    <!-- 空状态 -->
+    <view class="no-more" wx:if="{{!loading && feedList.length === 0}}">
+      暂无相关动态
+    </view>
+  </view>
+</view>

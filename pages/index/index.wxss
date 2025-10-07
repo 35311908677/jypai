@@ -1,0 +1,486 @@
+/* pages/index/index.wxss - Apple风格 */
+/* 复用全局CSS变量并添加页面特定变量 */
+:root {
+  --like-color: #34c759;
+  --dislike-color: #ff3b30;
+  --info-color: #5856d6;
+  --card-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+  --btn-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.1);
+  --card-radius: 28rpx;
+}
+
+/* 容器样式 */
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--background-color);
+}
+
+/* 卡片容器 */
+.card-container {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+}
+
+/* 用户卡片 - Apple风格 */
+.user-card {
+  width: 100%;
+  height: 80vh;
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28), box-shadow 0.3s ease;
+  background-color: #ffffff;
+  border: 1rpx solid var(--border-color);
+}
+
+/* 卡片旋转效果优化 */
+.user-card[style*="rotate"] {
+  transform-origin: center center;
+}
+
+/* 滑动时的视差效果 */
+.user-card[style*="translateX"] .user-photo {
+  transition: transform 0.3s ease;
+  transform: scale(1.05);
+}
+
+/* 卡片点击效果 */
+.user-card:active {
+  box-shadow: 0 15rpx 50rpx rgba(0, 0, 0, 0.15);
+}
+
+/* 卡片层叠效果 */
+.card-container::before {
+  content: '';
+  position: absolute;
+  width: 90%;
+  height: 78vh;
+  border-radius: var(--card-radius);
+  background-color: #ffffff;
+  z-index: -1;
+  box-shadow: var(--card-shadow);
+  opacity: 0.6;
+  transform: scale(0.97);
+}
+
+.card-container::after {
+  content: '';
+  position: absolute;
+  width: 85%;
+  height: 76vh;
+  border-radius: var(--card-radius);
+  background-color: #ffffff;
+  z-index: -2;
+  box-shadow: var(--card-shadow);
+  opacity: 0.4;
+  transform: scale(0.94);
+}
+
+/* 用户照片 */
+.user-photo {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 28rpx;
+}
+
+/* 喜欢标记 - 潮流风格 */
+.like-tag {
+  position: absolute;
+  top: 60rpx;
+  right: 60rpx;
+  background-color: var(--like-color);
+  color: #ffffff;
+  padding: 16rpx 32rpx;
+  border-radius: 36rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  transform: rotate(45deg);
+  box-shadow: 0 8rpx 30rpx rgba(52, 199, 89, 0.4);
+  border: 4rpx solid rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  opacity: 0.95;
+}
+
+/* 不喜欢标记 - 潮流风格 */
+.dislike-tag {
+  position: absolute;
+  top: 60rpx;
+  left: 60rpx;
+  background-color: var(--dislike-color);
+  color: #ffffff;
+  padding: 16rpx 32rpx;
+  border-radius: 36rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  transform: rotate(-45deg);
+  box-shadow: 0 8rpx 30rpx rgba(255, 59, 48, 0.4);
+  border: 4rpx solid rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  opacity: 0.95;
+}
+
+/* 标签图标样式 */
+.tag-icon {
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 8rpx;
+}
+
+/* 灵魂匹配度标志 */
+.soul-match-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, #8A2BE2, #9932CC);
+  padding: 24rpx 40rpx;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  box-shadow: 0 10rpx 40rpx rgba(138, 43, 226, 0.6);
+  border: 6rpx solid rgba(255, 255, 255, 0.9);
+  opacity: 0.9;
+  z-index: 10;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+/* 滑动提示样式 */
+.swipe-hint {
+  position: absolute;
+  bottom: 300rpx;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 5;
+  opacity: 0.8;
+  animation: fadeInOut 3s ease-in-out infinite;
+}
+
+.hint-text {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 12rpx 24rpx;
+  border-radius: 30rpx;
+  font-size: 28rpx;
+  backdrop-filter: blur(10rpx);
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+.badge-icon {
+  width: 48rpx;
+  height: 48rpx;
+}
+
+.badge-text {
+  color: white;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.badge-value {
+  color: #FFD700;
+  font-size: 36rpx;
+  font-weight: bold;
+  text-shadow: 0 2rpx 10rpx rgba(255, 255, 0, 0.6);
+}
+
+/* 发光动画 */
+@keyframes glow {
+  from {
+    box-shadow: 0 10rpx 40rpx rgba(138, 43, 226, 0.6);
+  }
+  to {
+    box-shadow: 0 15rpx 60rpx rgba(138, 43, 226, 0.9);
+  }
+}
+
+/* 用户信息 - Apple风格 */
+.user-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.4), transparent);
+  padding: 60rpx 40rpx 40rpx 40rpx;
+  color: #ffffff;
+  border-radius: 0 0 28rpx 28rpx;
+}
+
+/* 用户名称 - Apple风格 */
+.user-name {
+  font-size: 44rpx;
+  font-weight: 700;
+  margin-bottom: 10rpx;
+  display: block;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.5);
+}
+
+/* 用户简介 - Apple风格 */
+.user-bio {
+  font-size: 30rpx;
+  margin-bottom: 20rpx;
+  display: block;
+  line-height: 42rpx;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.3);
+}
+
+/* 用户标签容器 - Apple风格 */
+.user-tags {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20rpx;
+}
+
+/* 标签样式 - Apple风格 */
+.tag {
+  background-color: rgba(255, 255, 255, 0.25);
+  padding: 10rpx 24rpx;
+  border-radius: 20rpx;
+  font-size: 26rpx;
+  margin-right: 16rpx;
+  margin-bottom: 16rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10rpx);
+  transition: all 0.2s ease;
+}
+
+.tag:active {
+  background-color: rgba(255, 255, 255, 0.4);
+  transform: scale(1.05);
+}
+
+/* 用户距离 - Apple风格 */
+.user-distance {
+  font-size: 28rpx;
+  opacity: 0.9;
+  text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.3);
+}
+
+/* 加载状态 - Apple风格 */
+.loading {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: var(--text-secondary);
+}
+
+/* 加载动画 - Apple风格 */
+.loading::before {
+  content: "";
+  width: 80rpx;
+  height: 80rpx;
+  border: 8rpx solid rgba(0, 122, 255, 0.2);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 30rpx;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 没有更多用户 - Apple风格 */
+.no-more {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx;
+}
+
+.no-more-icon {
+  width: 240rpx;
+  height: 240rpx;
+  border-radius: 50%;
+  margin-bottom: 30rpx;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.1);
+}
+
+.no-more text {
+  font-size: 34rpx;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.no-more-tips {
+  font-size: 30rpx;
+  color: var(--text-tertiary);
+  margin-top: 20rpx;
+  text-align: center;
+  padding: 0 40rpx;
+  line-height: 44rpx;
+}
+
+/* 操作按钮 - Apple风格 */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  padding: 30rpx 0 60rpx 0;
+  position: relative;
+  z-index: 10;
+}
+
+/* 圆形按钮 - Apple风格 */
+.btn-circle {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 60rpx;
+  box-shadow: var(--btn-shadow);
+  transition: all 0.2s ease;
+  border: 1rpx solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 按钮标签样式 */
+.btn-label {
+  position: absolute;
+  bottom: -60rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.btn-dislike .btn-label {
+  color: var(--dislike-color);
+}
+
+.btn-like .btn-label {
+  color: var(--like-color);
+}
+
+.btn-info .btn-label {
+  color: var(--info-color);
+}
+
+/* 按钮点击波纹效果 */
+.btn-circle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 50%;
+  background-color: currentColor;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+.btn-circle:active::after {
+  transform: translate(-50%, -50%) scale(6);
+  opacity: 0.1;
+}
+
+/* 不喜欢按钮 - Apple风格 */
+.btn-dislike {
+  border: 4rpx solid #FFECEC;
+}
+
+.btn-dislike:active {
+  transform: scale(0.95);
+  background-color: #FFECEC;
+  box-shadow: 0 4rpx 15rpx rgba(255, 59, 48, 0.3);
+}
+
+/* 喜欢按钮 - Apple风格 */
+.btn-like {
+  border: 4rpx solid #E8FFF3;
+  position: relative;
+}
+
+.btn-like::before {
+  content: "";
+  position: absolute;
+  top: -10rpx;
+  left: -10rpx;
+  right: -10rpx;
+  bottom: -10rpx;
+  border-radius: 50%;
+  border: 2rpx dashed var(--like-color);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s ease;
+}
+
+.btn-like:active {
+  transform: scale(0.95);
+  background-color: #E8FFF3;
+  box-shadow: 0 4rpx 15rpx rgba(52, 199, 89, 0.3);
+}
+
+.btn-like:active::before {
+  opacity: 1;
+  transform: scale(1);
+  animation: ring 0.6s ease-out;
+}
+
+/* 查看详情按钮 - Apple风格 */
+.btn-info {
+  width: 100rpx;
+  height: 100rpx;
+  border: 4rpx solid #E6F7FF;
+  margin: 0 20rpx;
+  align-self: flex-end;
+  margin-bottom: 20rpx;
+}
+
+.btn-info:active {
+  transform: scale(0.95);
+  background-color: #E6F7FF;
+  box-shadow: 0 4rpx 15rpx rgba(88, 86, 214, 0.3);
+}
+
+/* 按钮图标 - Apple风格 */
+.btn-icon {
+  width: 70rpx;
+  height: 70rpx;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* 按钮波纹动画 */
+@keyframes ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}

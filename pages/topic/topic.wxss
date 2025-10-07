@@ -1,0 +1,302 @@
+/* pages/topic/topic.wxss - Soul风格话题页面样式 */
+
+/* Soul风格色彩和变量 */
+:root {
+  --primary-color: #ff4a75; /* Soul标志性粉色 */
+  --secondary-color: #7464ff;
+  --background-color: #f9f5ff;
+  --card-background: #ffffff;
+  --text-primary: #333333;
+  --text-secondary: #999999;
+  --text-tertiary: #cccccc;
+  --border-color: #f0e6ff;
+  --shadow: 0 4rpx 16rpx rgba(255, 74, 117, 0.1);
+  --card-radius: 40rpx;
+  --button-radius: 40rpx;
+  --avatar-radius: 50%;
+  --animation-speed: 0.3s;
+}
+
+/* 容器样式 */
+.container {
+  height: 100vh;
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  background-image: linear-gradient(135deg, #f9f5ff 0%, #fff0f5 100%);
+  background-size: 100% 100%;
+}
+
+/* 卡片渐变背景效果 */
+.gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,74,117,0.05) 0%, rgba(116,100,255,0.05) 100%);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* 毛玻璃效果 */
+.glass-effect {
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1rpx solid rgba(255, 255, 255, 0.2);
+}
+
+/* 顶部导航栏 */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 40rpx;
+  background-color: var(--card-background);
+  box-shadow: var(--shadow);
+  position: relative;
+  z-index: 100;
+}
+
+.nav-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-align: center;
+  flex: 1;
+}
+
+.back-btn {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--avatar-radius);
+}
+
+.back-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+/* 话题信息卡片 */
+.topic-info-card {
+  position: relative;
+  background-color: var(--card-background);
+  border-radius: 0 0 var(--card-radius) var(--card-radius);
+  padding: 40rpx;
+  box-shadow: 0 8rpx 32rpx rgba(255, 74, 117, 0.12);
+  margin-bottom: 30rpx;
+  border: 1rpx solid rgba(255, 74, 117, 0.08);
+  overflow: hidden;
+}
+
+.topic-name {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+
+.topic-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30rpx;
+  padding: 20rpx 0;
+  border-top: 2rpx dashed var(--border-color);
+  border-bottom: 2rpx dashed var(--border-color);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-number {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 8rpx;
+}
+
+.stat-label {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+}
+
+.topic-description {
+  font-size: 32rpx;
+  line-height: 48rpx;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 30rpx;
+  padding: 0 40rpx;
+}
+
+.topic-actions {
+  display: flex;
+  justify-content: center;
+  gap: 20rpx;
+}
+
+.follow-btn {
+  padding: 20rpx 60rpx;
+  background-color: var(--primary-color);
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: 600;
+  border-radius: var(--button-radius);
+  transition: all var(--animation-speed) ease;
+}
+
+.follow-btn:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.share-btn {
+  padding: 20rpx 60rpx;
+  background-color: rgba(255, 74, 117, 0.08);
+  color: var(--primary-color);
+  font-size: 32rpx;
+  font-weight: 600;
+  border-radius: var(--button-radius);
+  border: 2rpx solid rgba(255, 74, 117, 0.2);
+  transition: all var(--animation-speed) ease;
+}
+
+.share-btn:active {
+  transform: scale(0.98);
+  background-color: rgba(255, 74, 117, 0.15);
+}
+
+/* 话题内容分类 */
+.topic-tabs {
+  display: flex;
+  background: transparent;
+  border-radius: var(--card-radius);
+  margin: 0 30rpx 30rpx 30rpx;
+  overflow: hidden;
+}
+
+.tab-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24rpx 0;
+  font-size: 34rpx;
+  color: var(--text-secondary);
+  font-weight: 500;
+  position: relative;
+  transition: color var(--animation-speed) ease;
+}
+
+.tab-item.active {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60rpx;
+  height: 6rpx;
+  background-color: var(--primary-color);
+  border-radius: 3rpx;
+}
+
+/* 话题动态列表 */
+.topic-feed-list {
+  flex: 1;
+  padding: 0 30rpx 140rpx 30rpx;
+  overflow-y: auto;
+}
+
+/* 动态卡片 */
+.feed-card {
+  position: relative;
+  background-color: var(--card-background);
+  border-radius: var(--card-radius);
+  margin: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 8rpx 32rpx rgba(255, 74, 117, 0.12);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  border: 1rpx solid rgba(255, 74, 117, 0.08);
+  overflow: hidden;
+}
+
+/* 图片网格 */
+.image-grid {
+  margin-top: 20rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+/* 图片悬停效果 */
+.image-hover-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,74,117,0) 0%, rgba(255,74,117,0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border-radius: 10rpx;
+}
+
+.image-item:active .image-hover-effect {
+  opacity: 1;
+}
+
+/* 图片样式优化 */
+.feed-image {
+  transition: transform 0.3s ease;
+  border-radius: 10rpx;
+}
+
+.image-item:active .feed-image {
+  transform: scale(0.98);
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 0;
+  color: var(--text-secondary);
+}
+
+.loading::before {
+  content: "";
+  width: 60rpx;
+  height: 60rpx;
+  border: 6rpx solid rgba(255, 107, 129, 0.2);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 20rpx;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 没有更多内容 */
+.no-more {
+  text-align: center;
+  padding: 60rpx 0;
+  color: var(--text-tertiary);
+  font-size: 28rpx;
+}

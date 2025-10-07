@@ -1,0 +1,95 @@
+<!-- pages/activity-list/activity-list.wxml -->
+<view class="container">
+  <!-- 头部标题 -->
+  <view class="header">
+    <text class="title">活动</text>
+  </view>
+  
+  <!-- 活动分类 -->
+  <scroll-view class="category-scroll" scroll-x="true" wx:if="{{categories.length > 0}}">
+    <view class="category-list">
+      <view 
+        class="category-item {{selectedCategory === '' ? 'active' : ''}}" 
+        data-category="" 
+        bindtap="selectCategory"
+      >
+        <text>全部</text>
+      </view>
+      <view 
+        class="category-item {{selectedCategory === item ? 'active' : ''}}" 
+        wx:for="{{categories}}" 
+        wx:key="index" 
+        data-category="{{item}}" 
+        bindtap="selectCategory"
+      >
+        <text>{{item}}</text>
+      </view>
+    </view>
+  </scroll-view>
+  
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{isLoading && activities.length === 0}}">
+    <text>加载中...</text>
+  </view>
+  
+  <!-- 活动列表 -->
+  <view class="activity-list" wx:if="{{activities.length > 0}}">
+    <view 
+      class="activity-item" 
+      wx:for="{{activities}}" 
+      wx:key="_id"
+      data-activity-id="{{item._id}}"
+      bindtap="enterActivityDetail"
+    >
+      <!-- 活动图片 -->
+      <image 
+        class="activity-image" 
+        src="{{item.images && item.images.length > 0 ? item.images[0] : 'https://picsum.photos/400/200'}}" 
+        mode="aspectFill"
+      ></image>
+      
+      <!-- 活动信息 -->
+      <view class="activity-info">
+        <!-- 活动标题 -->
+        <text class="activity-title">{{item.title}}</text>
+        
+        <!-- 活动时间和地点 -->
+        <view class="activity-meta">
+          <view class="meta-item">
+            <text class="meta-icon">🕐</text>
+            <text class="meta-text">{{formatTime(item.time)}}</text>
+          </view>
+          <view class="meta-item">
+            <text class="meta-icon">📍</text>
+            <text class="meta-text">{{item.location}}</text>
+          </view>
+        </view>
+        
+        <!-- 活动人数 -->
+        <view class="activity-count">
+          <text class="count-text">{{item.participants.length}}人已报名</text>
+          <text class="category-text">{{item.category}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!isLoading && activities.length === 0}}">
+    <image src="https://picsum.photos/200/200" class="empty-icon"></image>
+    <text class="empty-text">暂无活动</text>
+    <text class="empty-tips">创建一个活动，认识新朋友吧</text>
+  </view>
+  
+  <!-- 创建活动按钮 -->
+  <view class="create-btn-container">
+    <button 
+      class="create-btn" 
+      type="primary" 
+      size="mini"
+      bindtap="createActivity"
+    >
+      创建活动
+    </button>
+  </view>
+</view>

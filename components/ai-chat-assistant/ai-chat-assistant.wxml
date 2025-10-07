@@ -1,0 +1,78 @@
+<!-- 智能聊天助手组件 -->
+<view class="ai-chat-assistant" wx:if="{{showAssistant}}">
+  <!-- 头部 -->
+  <view class="assistant-header">
+    <view class="assistant-title">
+      <image class="ai-icon" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007aff'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/%3E%3C/svg%3E" mode="aspectFit" />
+      <text>AI聊天助手</text>
+    </view>
+    <view class="assistant-actions">
+      <view class="action-btn" bindtap="toggleAssistant">
+        <image src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238e8e93'%3E%3Cpath d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/%3E%3C/svg%3E" mode="aspectFit" class="close-icon" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="assistant-content">
+    <!-- 聊天情绪分析 -->
+    <view class="section emotion-section" wx:if="{{emotionAnalysis && emotionAnalysis.score}}">
+      <view class="section-header">
+        <text class="section-title">聊天氛围</text>
+      </view>
+      <view class="emotion-analysis">
+        <view class="emotion-score">
+          <text class="score-number">{{emotionAnalysis.score}}</text>
+          <text class="score-text">分</text>
+        </view>
+        <view class="emotion-label">
+          <text class="emotion-name">{{emotionAnalysis.label}}</text>
+          <text class="emotion-desc">{{emotionAnalysis.description}}</text>
+        </view>
+        <view class="emotion-progress">
+          <view class="progress-bar">
+            <view class="progress-fill" style="width: {{emotionAnalysis.score}}%; background-color: {{emotionAnalysis.color}};"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 回复建议 -->
+    <view class="section reply-section" wx:if="{{replySuggestions && replySuggestions.length > 0}}">
+      <view class="section-header">
+        <text class="section-title">回复建议</text>
+      </view>
+      <view class="reply-suggestions">
+        <view class="suggestion-item" wx:for="{{replySuggestions}}" wx:key="index" bindtap="selectReply" data-reply="{{item}}">
+          <text class="suggestion-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 对话摘要 -->
+    <view class="section summary-section" wx:if="{{conversationSummary}}">
+      <view class="section-header">
+        <text class="section-title">对话摘要</text>
+        <view class="section-action" bindtap="refreshSummary">
+          <text class="refresh-text">刷新</text>
+          <image src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238e8e93'%3E%3Cpath d='M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z'/%3E%3C/svg%3E" mode="aspectFit" class="refresh-icon" />
+        </view>
+      </view>
+      <view class="summary-content">
+        <text class="summary-text">{{conversationSummary}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作 -->
+  <view class="assistant-footer">
+    <view class="quick-actions">
+      <view class="quick-action-btn" bindtap="generateGreeting">
+        <text>生成问候语</text>
+      </view>
+      <view class="quick-action-btn" bindtap="generateIceBreaker">
+        <text>破冰话题</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,58 @@
+<!-- pages/message-list/message-list.wxml -->
+<view class="container">
+  <!-- 头部标题 -->
+  <view class="header">
+    <text class="title">消息</text>
+  </view>
+  
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{isLoading && chatList.length === 0}}">
+    <text>加载中...</text>
+  </view>
+  
+  <!-- 消息列表 -->
+  <view class="chat-list" wx:if="{{chatList.length > 0}}">
+    <view 
+      class="chat-item" 
+      wx:for="{{chatList}}" 
+      wx:key="_id"
+      data-chat-id="{{item._id}}"
+      data-user-id="{{item.participants[0]._id === app.globalData.userInfo.id ? item.participants[1]._id : item.participants[0]._id}}"
+      bindtap="enterChat"
+    >
+      <!-- 头像 -->
+      <view class="avatar-container">
+        <image 
+          class="avatar" 
+          src="{{item.participants[0]._id === app.globalData.userInfo.id ? item.participants[1].avatar : item.participants[0].avatar || 'https://picsum.photos/100/100'}}" 
+          mode="aspectFill"
+        ></image>
+        <!-- 未读消息数量 -->
+        <view class="unread-badge" wx:if="{{unreadCounts[item._id] > 0}}">
+          <text class="unread-count">{{unreadCounts[item._id]}}</text>
+        </view>
+      </view>
+      
+      <!-- 消息内容 -->
+      <view class="message-content">
+        <!-- 用户名和时间 -->
+        <view class="message-header">
+          <text class="username">{{item.participants[0]._id === app.globalData.userInfo.id ? item.participants[1].nickname : item.participants[0].nickname}}</text>
+          <text class="time">{{formatTime(item.lastMessage ? item.lastMessage.timestamp : item.updatedAt)}}</text>
+        </view>
+        
+        <!-- 最后一条消息 -->
+        <view class="last-message">
+          <text class="message-text">{{item.lastMessage ? (item.lastMessage.type === 'image' ? '[图片]' : item.lastMessage.content) : '开始聊天吧'}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!isLoading && chatList.length === 0}}">
+    <image src="https://picsum.photos/200/200" class="empty-icon"></image>
+    <text class="empty-text">暂无消息</text>
+    <text class="empty-tips">去发现页面寻找新朋友吧</text>
+  </view>
+</view>

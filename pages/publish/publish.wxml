@@ -1,0 +1,98 @@
+<!-- pages/publish/publish.wxml -->
+<view class="container">
+  <!-- 顶部导航栏 -->
+  <view class="navbar">
+    <view class="nav-left" bindtap="cancelPublish">
+      <text class="cancel-btn">取消</text>
+    </view>
+    <view class="nav-title">发布动态</view>
+    <view class="nav-right" bindtap="publishFeed">
+      <text class="publish-btn" disabled="{{!content.trim() && selectedImages.length === 0 && !selectedMusic}}">发布</text>
+    </view>
+  </view>
+
+  <!-- 内容输入区 -->
+  <view class="publish-content">
+    <!-- 用户信息 -->
+    <view class="user-info">
+      <image src="{{userInfo.avatar || 'https://picsum.photos/200/200'}}" class="user-avatar"></image>
+      <text class="user-name">{{userInfo.nickname || '用户'}}</text>
+    </view>
+
+    <!-- 文本输入 -->
+    <textarea 
+      class="content-textarea" 
+      placeholder="分享你的想法..." 
+      bindinput="onContentInput" 
+      value="{{content}}"
+      maxlength="200"
+    ></textarea>
+
+    <!-- 字数统计 -->
+    <view class="word-count">
+      <text>{{content.length}}/200</text>
+    </view>
+
+    <!-- 图片选择 -->
+    <view class="image-selector" wx:if="{{selectedImages.length < 9}}">
+      <view class="add-image-btn" bindtap="chooseImage">
+        <image src="https://picsum.photos/100/100?plus" class="add-image-icon"></image>
+        <text class="add-image-text">添加图片</text>
+      </view>
+    </view>
+
+    <!-- 已选图片预览 -->
+    <view class="image-preview" wx:if="{{selectedImages.length > 0}}">
+      <view class="image-item" wx:for="{{selectedImages}}" wx:key="index">
+        <image src="{{item}}" mode="aspectFill" class="preview-image"></image>
+        <view class="delete-image" bindtap="deleteImage" data-index="{{index}}">
+          <image src="https://picsum.photos/40/40?close" class="delete-icon"></image>
+        </view>
+      </view>
+    </view>
+
+    <!-- 音乐选择 -->
+    <view class="music-selector" bindtap="chooseMusic">
+      <image src="https://picsum.photos/60/60?music" class="music-icon"></image>
+      <text class="music-text">添加音乐</text>
+      <image src="https://picsum.photos/40/40?arrow" class="arrow-icon"></image>
+    </view>
+
+    <!-- 已选音乐 -->
+    <view class="selected-music" wx:if="{{selectedMusic}}">
+      <image src="{{selectedMusic.cover || 'https://picsum.photos/60/60?cover'}}" class="music-cover"></image>
+      <view class="music-details">
+        <text class="music-title">{{selectedMusic.title}}</text>
+        <text class="music-artist">{{selectedMusic.artist}}</text>
+      </view>
+      <view class="delete-music" bindtap="deleteMusic">
+        <image src="https://picsum.photos/40/40?close" class="delete-icon"></image>
+      </view>
+    </view>
+
+    <!-- 添加话题 -->
+    <view class="topic-selector" bindtap="chooseTopic">
+      <image src="https://picsum.photos/60/60?topic" class="topic-icon"></image>
+      <text class="topic-text">添加话题</text>
+      <image src="https://picsum.photos/40/40?arrow" class="arrow-icon"></image>
+    </view>
+
+    <!-- 已选话题 -->
+    <view class="selected-topics" wx:if="{{selectedTopics && selectedTopics.length > 0}}">
+      <view class="topic-tag" wx:for="{{selectedTopics}}" wx:key="index">
+        <text>#{{item}}#</text>
+        <view class="delete-topic" bindtap="deleteTopic" data-index="{{index}}">
+          <image src="https://picsum.photos/30/30?close" class="delete-icon-small"></image>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-mask" wx:if="{{isPublishing}}">
+    <view class="loading-content">
+      <view class="loading-spinner"></view>
+      <text>发布中...</text>
+    </view>
+  </view>
+</view>

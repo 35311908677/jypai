@@ -1,0 +1,58 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/index/index",
+    "pages/message-list/message-list",
+    "pages/profile/profile",
+    "pages/settings/settings",
+    "pages/chat/chat",
+    "pages/edit-profile/edit-profile",
+    "pages/activity-list/activity-list",
+    "pages/activity-detail/activity-detail",
+    "pages/create-activity/create-activity",
+    "pages/feed/feed",
+    "pages/publish/publish",
+    "pages/topic/topic"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "交友π",
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "default"
+  },
+  "tabBar": {
+    "color": "#8e8e93",
+    "selectedColor": "#007aff",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "匹配",
+        "iconPath": "assets/icons/match.png",
+        "selectedIconPath": "assets/icons/match-active.png"
+      },
+      {
+        "pagePath": "pages/feed/feed",
+        "text": "动态",
+        "iconPath": "assets/icons/activity.png",
+        "selectedIconPath": "assets/icons/activity-active.png"
+      },
+      {
+        "pagePath": "pages/message-list/message-list",
+        "text": "消息",
+        "iconPath": "assets/icons/message.png",
+        "selectedIconPath": "assets/icons/message-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "assets/icons/profile.png",
+        "selectedIconPath": "assets/icons/profile-active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

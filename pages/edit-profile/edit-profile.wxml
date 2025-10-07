@@ -1,0 +1,256 @@
+<!-- pages/edit-profile/edit-profile.wxml -->
+<view class="container">
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{isLoading}}">
+    <text>加载中...</text>
+  </view>
+  
+  <!-- 标签页导航 -->
+  <view class="tab-nav" wx:if="{{!isLoading}}">
+    <view 
+      class="tab-item {{activeTab === 'basic' ? 'active' : ''}}" 
+      data-tab="basic" 
+      bindtap="switchTab"
+    >
+      基本资料
+    </view>
+    <view 
+      class="tab-item {{activeTab === 'match' ? 'active' : ''}}" 
+      data-tab="match" 
+      bindtap="switchTab"
+    >
+      匹配偏好
+    </view>
+    <view 
+      class="tab-item {{activeTab === 'privacy' ? 'active' : ''}}" 
+      data-tab="privacy" 
+      bindtap="switchTab"
+    >
+      隐私设置
+    </view>
+  </view>
+  
+  <!-- 基本资料表单 -->
+  <view class="form-container" wx:if="{{activeTab === 'basic' && !isLoading}}">
+    <!-- 头像 -->
+    <view class="form-item avatar-item">
+      <text class="label">头像</text>
+      <view class="avatar-upload">
+        <image 
+          class="avatar" 
+          src="{{avatarTempFilePath || userInfo.avatar || 'https://picsum.photos/200/200'}}" 
+          mode="aspectFill"
+        ></image>
+        <button 
+          class="avatar-upload-btn" 
+          bindtap="chooseAvatar"
+          type="primary"
+          size="mini"
+        >
+          更换头像
+        </button>
+      </view>
+    </view>
+    
+    <!-- 昵称 -->
+    <view class="form-item">
+      <text class="label">昵称</text>
+      <input 
+        class="input" 
+        placeholder="请输入昵称"
+        value="{{userInfo.nickname}}"
+        data-field="nickname"
+        bindinput="onInputChange"
+      />
+    </view>
+    
+    <!-- 性别 -->
+    <view class="form-item">
+      <text class="label">性别</text>
+      <picker 
+        class="picker" 
+        range="{{genderOptions}}"
+        range-key="name"
+        value="{{userInfo.gender}}"
+        data-field="gender"
+        bindchange="onPickerChange"
+      >
+        <view class="picker-content">
+          {{genderOptions[userInfo.gender].name || '请选择性别'}}
+        </view>
+      </picker>
+    </view>
+    
+    <!-- 年龄 -->
+    <view class="form-item">
+      <text class="label">年龄</text>
+      <picker 
+        class="picker" 
+        range="{{ageRangeOptions}}"
+        range-key="name"
+        value="{{userInfo.age - 18}}"
+        data-field="age"
+        bindchange="onPickerChange"
+      >
+        <view class="picker-content">
+          {{userInfo.age}}岁
+        </view>
+      </picker>
+    </view>
+    
+    <!-- 个人简介 -->
+    <view class="form-item">
+      <text class="label">个人简介</text>
+      <textarea 
+        class="textarea" 
+        placeholder="介绍一下自己吧"
+        value="{{userInfo.bio}}"
+        data-field="bio"
+        bindinput="onInputChange"
+        auto-height
+      />
+    </view>
+    
+    <!-- 兴趣爱好 -->
+    <view class="form-item">
+      <text class="label">兴趣爱好</text>
+      <input 
+        class="input" 
+        placeholder="请输入兴趣爱好，用逗号分隔"
+        value="{{userInfo.interests && userInfo.interests.join(',')}}"
+      />
+    </view>
+    
+    <!-- 个人标签 -->
+    <view class="form-item">
+      <text class="label">个人标签</text>
+      <input 
+        class="input" 
+        placeholder="请输入个人标签，用逗号分隔"
+        value="{{userInfo.tags && userInfo.tags.join(',')}}"
+      />
+    </view>
+    
+    <!-- 保存按钮 -->
+    <button 
+      class="btn-primary save-btn" 
+      bindtap="saveBasicInfo"
+      loading="{{isLoading}}"
+    >
+      保存
+    </button>
+  </view>
+  
+  <!-- 匹配偏好表单 -->
+  <view class="form-container" wx:if="{{activeTab === 'match' && !isLoading}}">
+    <!-- 期望性别 -->
+    <view class="form-item">
+      <text class="label">期望性别</text>
+      <picker 
+        class="picker" 
+        range="{{genderOptions}}"
+        range-key="name"
+        value="{{userInfo.matchPreferences.gender}}"
+        data-field="matchPreferences.gender"
+        bindchange="onPickerChange"
+      >
+        <view class="picker-content">
+          {{genderOptions[userInfo.matchPreferences.gender].name}}
+        </view>
+      </picker>
+    </view>
+    
+    <!-- 年龄范围 -->
+    <view class="form-item">
+      <text class="label">年龄范围</text>
+      <view class="age-range">
+        <slider 
+          min="18"
+          max="60"
+          value="{{userInfo.matchPreferences.ageRange[0]}}"
+          show-value
+          data-field="matchPreferences.ageRange"
+          data-index="0"
+          bindchange="onSliderChange"
+        />
+        <slider 
+          min="18"
+          max="60"
+          value="{{userInfo.matchPreferences.ageRange[1]}}"
+          show-value
+          data-field="matchPreferences.ageRange"
+          data-index="1"
+          bindchange="onSliderChange"
+        />
+      </view>
+    </view>
+    
+    <!-- 距离范围 -->
+    <view class="form-item">
+      <text class="label">距离范围</text>
+      <picker 
+        class="picker" 
+        range="{{distanceOptions}}"
+        range-key="name"
+        value="{{distanceIndex}}"
+        bindchange="onPickerChange"
+        data-field="matchPreferences.distance"
+      >
+        <view class="picker-content">
+          {{distanceOptions[distanceIndex].name}}
+        </view>
+      </picker>
+    </view>
+    
+    <!-- 保存按钮 -->
+    <button 
+      class="btn-primary save-btn" 
+      bindtap="saveMatchPreferences"
+      loading="{{isLoading}}"
+    >
+      保存
+    </button>
+  </view>
+  
+  <!-- 隐私设置表单 -->
+  <view class="form-container" wx:if="{{activeTab === 'privacy' && !isLoading}}">
+    <!-- 显示位置 -->
+    <view class="form-item switch-item">
+      <text class="label">显示位置</text>
+      <switch 
+        checked="{{userInfo.privacySettings.showLocation}}"
+        data-field="privacySettings.showLocation"
+        bindchange="onSwitchChange"
+      />
+    </view>
+    
+    <!-- 显示年龄 -->
+    <view class="form-item switch-item">
+      <text class="label">显示年龄</text>
+      <switch 
+        checked="{{userInfo.privacySettings.showAge}}"
+        data-field="privacySettings.showAge"
+        bindchange="onSwitchChange"
+      />
+    </view>
+    
+    <!-- 允许陌生人打招呼 -->
+    <view class="form-item switch-item">
+      <text class="label">允许陌生人打招呼</text>
+      <switch 
+        checked="{{userInfo.privacySettings.allowStrangers}}"
+        data-field="privacySettings.allowStrangers"
+        bindchange="onSwitchChange"
+      />
+    </view>
+    
+    <!-- 保存按钮 -->
+    <button 
+      class="btn-primary save-btn" 
+      bindtap="savePrivacySettings"
+      loading="{{isLoading}}"
+    >
+      保存
+    </button>
+  </view>
+</view>

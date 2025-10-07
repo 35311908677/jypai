@@ -1,0 +1,144 @@
+<!-- pages/feed/feed.wxml -->
+<view class="container">
+  <!-- 顶部导航栏 -->
+  <view class="navbar">
+    <view class="nav-title">广场</view>
+    <view class="nav-actions">
+      <view class="nav-btn" bindtap="navigateToSearch">
+        <image src="/assets/icons/search.svg" class="nav-icon"></image>
+      </view>
+    </view>
+  </view>
+
+  <!-- 顶部标签栏 -->
+  <view class="tabbar">
+    <scroll-view scroll-x="true" enable-flex class="tab-scroll">
+      <view class="tab-item {{activeTab === 'recommend' ? 'active' : ''}}" bindtap="switchTab" data-tab="recommend">推荐</view>
+      <view class="tab-item {{activeTab === 'follow' ? 'active' : ''}}" bindtap="switchTab" data-tab="follow">关注</view>
+      <view class="tab-item {{activeTab === 'nearby' ? 'active' : ''}}" bindtap="switchTab" data-tab="nearby">附近</view>
+      <view class="tab-item {{activeTab === 'music' ? 'active' : ''}}" bindtap="switchTab" data-tab="music">音乐</view>
+      <view class="tab-item {{activeTab === 'food' ? 'active' : ''}}" bindtap="switchTab" data-tab="food">美食</view>
+      <view class="tab-item {{activeTab === 'travel' ? 'active' : ''}}" bindtap="switchTab" data-tab="travel">旅行</view>
+      <view class="tab-item {{activeTab === 'reading' ? 'active' : ''}}" bindtap="switchTab" data-tab="reading">读书</view>
+    </scroll-view>
+  </view>
+
+  <!-- 动态列表 -->
+  <scroll-view scroll-y="true" class="feed-list" bindscrolltolower="loadMoreFeeds">
+    <!-- 动态卡片 -->
+    <view class="feed-card" wx:for="{{feedList}}" wx:key="id">
+      <view class="gradient-overlay"></view>
+      <!-- 用户信息 -->
+      <view class="feed-header">
+        <image src="{{item.user.avatar}}" class="user-avatar" bindtap="navigateToUserProfile" data-userid="{{item.user.id}}"></image>
+        <view class="user-info">
+          <text class="user-name" bindtap="navigateToUserProfile" data-userid="{{item.user.id}}">{{item.user.nickname}}</text>
+          <text class="post-time">{{item.postTime}}</text>
+        </view>
+        <view class="more-btn" bindtap="showMoreOptions" data-feedid="{{item.id}}">
+        <image src="/assets/icons/more.svg" class="more-icon"></image>
+      </view>
+      </view>
+
+      <!-- 动态内容 -->
+      <view class="feed-content">
+        <text class="content-text">{{item.content}}</text>
+        
+        <!-- 话题标签 -->
+        <view class="topic-tags" wx:if="{{item.topics && item.topics.length > 0}}" style="margin-top: 16rpx;">
+          <text class="topic-tag" wx:for="{{item.topics}}" wx:key="index" wx:for-item="topic" bindtap="navigateToTopic" data-topic="{{topic}}">#{{topic}}#</text>
+        </view>
+        
+        <!-- 图片列表 -->
+        <view class="image-grid" wx:if="{{item.images && item.images.length > 0}}">
+          <view class="image-item" wx:for="{{item.images}}" wx:for-item="image" wx:key="index" wx:for-index="imgIndex">
+            <image src="{{image}}" mode="aspectFill" class="feed-image" bindload="imageLoad" binderror="imageLoadError" data-feedid="{{item.id}}" data-index="{{imgIndex}}"></image>
+            <view class="image-hover-effect"></view>
+          </view>
+        </view>
+        
+        <!-- 音乐信息 -->
+        <view class="music-info" wx:if="{{item.music}}">
+          <image src="/assets/icons/music_cover.svg" class="music-cover"></image>
+          <view class="music-details">
+            <text class="music-title">{{item.music.title}}</text>
+            <text class="music-artist">{{item.music.artist}}</text>
+          </view>
+          <image src="/assets/icons/play.svg" class="play-icon"></image>
+        </view>
+      </view>
+
+      <!-- 互动栏 -->
+        <view class="interaction-bar">
+          <view class="interaction-item" bindtap="likeFeed" data-feedid="{{item.id}}">
+            <image src="{{item.isLiked ? '/assets/icons/like_active.svg' : '/assets/icons/like.svg'}}" class="interaction-icon"></image>
+            <text class="interaction-text">{{item.likeCount}}</text>
+          </view>
+          <view class="interaction-item" bindtap="commentFeed" data-feedid="{{item.id}}">
+            <image src="/assets/icons/comment.svg" class="interaction-icon"></image>
+            <text class="interaction-text">{{item.commentCount}}</text>
+          </view>
+          <view class="interaction-item" bindtap="collectFeed" data-feedid="{{item.id}}">
+            <image src="{{item.isCollected ? '/assets/icons/collect_active.svg' : '/assets/icons/collect.svg'}}" class="interaction-icon"></image>
+            <text class="interaction-text">{{item.collectCount}}</text>
+          </view>
+          <view class="interaction-item" bindtap="shareFeed" data-feedid="{{item.id}}">
+            <image src="/assets/icons/share.svg" class="interaction-icon"></image>
+            <text class="interaction-text">分享</text>
+          </view>
+        </view>
+        
+        <!-- Soul特色：灵魂匹配度标志 -->
+        <view class="soul-match-container" wx:if="{{item.soulMatch}}">
+          <image src="/assets/icons/soulmatch.svg" class="soul-match-icon"></image>
+          <text class="soul-match-text">和你的灵魂匹配度</text>
+          <text class="soul-match-percentage">{{item.soulMatch}}%</text>
+        </view>
+
+      <!-- 评论列表 -->
+      <view class="comment-list" wx:if="{{item.comments && item.comments.length > 0}}">
+        <view class="comment-item" wx:for="{{item.comments}}" wx:for-item="comment" wx:key="index">
+          <text class="comment-user">{{comment.user.nickname}}:</text>
+          <text class="comment-content">{{comment.content}}</text>
+        </view>
+        <view class="more-comments" bindtap="viewAllComments" data-feedid="{{item.id}}">
+          查看全部 {{item.commentCount}} 条评论
+        </view>
+      </view>
+
+      <!-- 评论输入框 -->
+      <view class="comment-input-container" data-feedid="{{item.id}}" bindtap="showCommentInput">
+        <view class="comment-input-placeholder">
+          <text>说点什么...</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加载中 -->
+    <view class="loading" wx:if="{{isLoading}}">
+      <view class="loading-spinner"></view>
+      <text>加载中...</text>
+    </view>
+
+    <!-- 没有更多内容 -->
+    <view class="no-more" wx:if="{{!isLoading && feedList.length > 0 && noMoreFeeds}}">
+      <text>没有更多动态了</text>
+    </view>
+  </scroll-view>
+
+  <!-- 发布按钮 -->
+  <view class="publish-btn" bindtap="navigateToPublish">
+      <image src="/assets/icons/plus.svg" class="publish-icon"></image>
+    </view>
+
+  <!-- 评论输入弹窗 -->
+  <view class="comment-modal" wx:if="{{showCommentModal}}" bindtap="hideCommentModal">
+    <view class="comment-modal-content" catchtap="stopPropagation">
+      <textarea class="comment-textarea" placeholder="写下你的评论..." bindinput="onCommentInput" value="{{commentContent}}"></textarea>
+      <view class="comment-modal-actions">
+        <button class="cancel-btn" bindtap="hideCommentModal">取消</button>
+        <button class="send-btn" bindtap="sendComment" disabled="{{!commentContent || commentContent.length === 0}}">发送</button>
+      </view>
+    </view>
+  </view>
+</view>

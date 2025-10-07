@@ -1,0 +1,107 @@
+<!-- pages/activity-detail/activity-detail.wxml -->
+<view class="container">
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{isLoading}}">
+    <text>加载中...</text>
+  </view>
+  
+  <!-- 活动详情 -->
+  <view class="activity-detail" wx:if="{{!isLoading && activityDetail}}">
+    <!-- 活动图片轮播 -->
+    <swiper class="image-swiper" indicator-dots="true" autoplay="false">
+      <block wx:for="{{activityDetail.images || []}}" wx:key="index">
+        <swiper-item>
+          <image 
+            class="activity-image" 
+            src="{{item}}" 
+            mode="aspectFill" 
+            data-index="{{index}}" 
+            bindtap="previewImage"
+          ></image>
+        </swiper-item>
+      </block>
+      <swiper-item wx:if="{{!activityDetail.images || activityDetail.images.length === 0}}">
+        <image 
+          class="activity-image" 
+          src="https://picsum.photos/750/300" 
+          mode="aspectFill"
+        ></image>
+      </swiper-item>
+    </swiper>
+    
+    <!-- 活动信息 -->
+    <view class="activity-info">
+      <!-- 活动标题 -->
+      <text class="activity-title">{{activityDetail.title}}</text>
+      
+      <!-- 活动分类和创建者 -->
+      <view class="activity-header">
+        <text class="category-badge">{{activityDetail.category}}</text>
+        <text class="creator-info">创建者: {{activityDetail.organizer.nickname || '匿名用户'}}</text>
+      </view>
+      
+      <!-- 活动时间和地点 -->
+      <view class="activity-meta">
+        <view class="meta-item">
+          <text class="meta-icon">🕐</text>
+          <text class="meta-text">{{formatTime(activityDetail.startTime)}}</text>
+        </view>
+        <view class="meta-item">
+          <text class="meta-icon">📍</text>
+          <text class="meta-text">{{activityDetail.location.address}}</text>
+        </view>
+        <view class="meta-item">
+          <text class="meta-icon">👥</text>
+          <text class="meta-text">上限 {{activityDetail.maxParticipants}}人</text>
+        </view>
+      </view>
+      
+      <!-- 活动介绍 -->
+      <view class="activity-description">
+        <text class="description-title">活动介绍</text>
+        <text class="description-content">{{activityDetail.description}}</text>
+      </view>
+      
+      <!-- 参与者列表 -->
+      <view class="participants-section" wx:if="{{participants.length > 0}}">
+        <text class="section-title">参与者 ({{participants.length}}/{{activityDetail.maxParticipants}})</text>
+        <view class="participants-list">
+          <view 
+            class="participant-item" 
+            wx:for="{{participants}}" 
+            wx:key="_id"
+            data-user-id="{{item._id}}" 
+            bindtap="viewUserProfile"
+          >
+            <image 
+              class="participant-avatar" 
+              src="{{item.avatar || 'https://picsum.photos/100/100'}}" 
+              mode="aspectFill"
+            ></image>
+            <text class="participant-name">{{item.nickname}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 操作按钮 -->
+    <view class="action-buttons">
+      <button 
+        class="action-btn primary-btn" 
+        type="primary" 
+        wx:if="{{!isJoined}}"
+        bindtap="joinActivity"
+      >
+        立即报名
+      </button>
+      <button 
+        class="action-btn cancel-btn" 
+        type="warn" 
+        wx:if="{{isJoined}}"
+        bindtap="leaveActivity"
+      >
+        取消报名
+      </button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,97 @@
+<!-- pages/index/index/index.wxml -->
+<view class="container">
+  <!-- 用户卡片区域 -->
+  <view class="card-container" wx:if="{{currentUser}}">
+    <view 
+      class="user-card" 
+      style="transform: translateX({{moveX}}px) rotate({{moveX/30}}deg);"
+      bindtouchstart="onTouchStart"
+      bindtouchmove="onTouchMove"
+      bindtouchend="onTouchEnd"
+    >
+      <!-- 用户照片 -->
+      <image class="user-photo" src="{{currentUser.avatar || 'https://picsum.photos/600/800'}}" mode="aspectFill"></image>
+      
+      <!-- 错、对标记 -->
+      <view class="like-tag" wx:if="{{moveX > 100}}">
+        <image class="tag-icon" src="/assets/icons/check.svg"></image>
+        <text class="tag-text">对</text>
+      </view>
+      <view class="dislike-tag" wx:if="{{moveX < -100}}">
+        <image class="tag-icon" src="/assets/icons/cross.svg"></image>
+        <text class="tag-text">错</text>
+      </view>
+      
+      <!-- 灵魂匹配度标志 -->
+      <view class="soul-match-badge" wx:if="{{currentUser && currentUser.soulMatch}}">
+        <image class="badge-icon" src="/assets/icons/soulmatch.svg"></image>
+        <text class="badge-text">灵魂匹配度</text>
+        <text class="badge-value">{{currentUser.soulMatch}}%</text>
+      </view>
+      
+      <!-- 功能提示 -->
+      <view class="swipe-hint">
+        <text class="hint-text">← 左滑不喜欢 / 右滑喜欢 →</text>
+      </view>
+      
+      <!-- 用户信息 -->
+      <view class="user-info">
+        <!-- 用户基本信息 -->
+        <view class="user-header">
+          <text class="user-name">{{currentUser.nickname}} {{currentUser.age}}岁</text>
+          <text class="user-distance">{{currentUser.distance || 100}}m</text>
+        </view>
+        
+        <!-- 用户简介 -->
+        <text class="user-bio">{{currentUser.bio || '这个人很懒，什么都没写...'}}</text>
+        
+        <!-- 用户标签 -->
+        <view class="user-tags" wx:if="{{currentUser.tags && currentUser.tags.length > 0}}">
+          <view class="tag" wx:for="{{currentUser.tags}}" wx:key="index">{{item}}</view>
+        </view>
+        
+        <!-- 额外信息 -->
+        <view class="user-meta" wx:if="{{currentUser.occupation || currentUser.education}}">
+          <text wx:if="{{currentUser.occupation}}">{{currentUser.occupation}}</text>
+          <text wx:if="{{currentUser.occupation && currentUser.education}}">•</text>
+          <text wx:if="{{currentUser.education}}">{{currentUser.education}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{isLoading}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">正在为您寻找合适的对象...</text>
+  </view>
+  
+  <!-- 没有更多用户 -->
+  <view class="no-more" wx:if="{{noMoreUsers && !isLoading && !currentUser}}">
+    <image src="https://picsum.photos/200/200" class="no-more-icon"></image>
+    <text>暂无更多推荐用户</text>
+    <text class="no-more-tips">请稍后再试或修改您的匹配偏好</text>
+    <button class="refresh-btn" bindtap="refreshRecommendations">重新加载</button>
+  </view>
+  
+  <!-- 操作按钮 -->
+  <view class="action-buttons" wx:if="{{currentUser}}">
+    <!-- 错按钮 -->
+    <view class="btn-circle btn-dislike" bindtap="dislikeUser">
+      <image src="/assets/icons/cross.svg" class="btn-icon" mode="aspectFit"></image>
+      <text class="btn-label">错</text>
+    </view>
+    
+    <!-- 对按钮 -->
+    <view class="btn-circle btn-like" bindtap="likeUser">
+      <image src="/assets/icons/check.svg" class="btn-icon" mode="aspectFit"></image>
+      <text class="btn-label">对</text>
+    </view>
+    
+    <!-- 查看详情按钮 -->
+    <view class="btn-circle btn-info" bindtap="viewUserDetail">
+      <image src="/assets/icons/btn-info.svg" class="btn-icon" mode="aspectFit"></image>
+      <text class="btn-label">详情</text>
+    </view>
+  </view>
+</view>

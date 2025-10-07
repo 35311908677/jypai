@@ -1,0 +1,130 @@
+/* app.wxss - Apple风格 */
+page {
+  /* Apple设计系统颜色 */
+  --primary-color: #007aff;
+  --secondary-color: #5856d6;
+  --success-color: #34c759;
+  --warning-color: #ff9500;
+  --danger-color: #ff3b30;
+  --background-color: #f2f2f7;
+  --text-primary: #000000;
+  --text-secondary: #8e8e93;
+  --text-tertiary: #c7c7cc;
+  --border-color: #e5e5ea;
+  --white: #ffffff;
+  
+  background-color: var(--background-color);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.header {
+  background-color: var(--white);
+  padding: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+/* Apple风格按钮 */
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border-radius: 10rpx;
+  padding: 20rpx 0;
+  text-align: center;
+  font-size: 28rpx;
+  margin-top: 40rpx;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary:active {
+  background-color: rgba(0, 122, 255, 0.9);
+}
+
+.btn-secondary {
+  background-color: var(--white);
+  color: var(--primary-color);
+  border: 1rpx solid var(--border-color);
+  border-radius: 10rpx;
+  padding: 20rpx 0;
+  text-align: center;
+  font-size: 28rpx;
+  margin-top: 40rpx;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:active {
+  background-color: var(--background-color);
+}
+
+/* Apple风格输入框 */
+.input {
+  background-color: var(--white);
+  border: 1rpx solid var(--border-color);
+  border-radius: 10rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  font-size: 28rpx;
+  transition: border-color 0.2s ease;
+}
+
+.input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+/* Apple风格文本 */
+.title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 20rpx;
+}
+
+.subtitle {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  margin-bottom: 30rpx;
+}
+
+/* Apple风格卡片 */
+.user-card {
+  background-color: var(--white);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-card:active {
+  transform: scale(0.98);
+}
+
+.user-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background-color: var(--border-color);
+}
+
+/* Apple风格加载动画 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60rpx 0;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  margin-left: 10rpx;
+}

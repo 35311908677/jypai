@@ -1,0 +1,85 @@
+<!-- pages/profile/profile.wxml -->
+<view class="container">
+  <!-- 顶部渐变背景 -->
+  <view class="header-gradient"></view>
+  
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{isLoading}}">
+    <text>加载中...</text>
+  </view>
+  
+  <!-- 用户资料卡片 -->
+  <view class="profile-card" wx:if="{{userInfo}}">
+    <!-- 头像 -->
+    <view class="avatar-container">
+      <image class="avatar" src="{{userInfo.avatar || 'https://picsum.photos/200/200'}}" mode="aspectFill"></image>
+      <text class="match-score" wx:if="{{!isOwnProfile}}">匹配度 95%</text>
+    </view>
+    
+    <!-- 基本信息 -->
+    <view class="basic-info">
+      <text class="nickname">{{userInfo.nickname}}</text>
+      <text class="age-gender">
+        {{userInfo.age}}岁 · 
+        {{userInfo.gender === 1 ? '男' : userInfo.gender === 2 ? '女' : '保密'}}
+      </text>
+      <text class="location" wx:if="{{userInfo.location && userInfo.location.address}}">
+        {{userInfo.location.address}}
+      </text>
+    </view>
+    
+    <!-- 个人简介 -->
+    <view class="bio-section">
+      <text class="section-title">个人简介</text>
+      <text class="bio-content">{{userInfo.bio || '这个人很懒，什么都没写...'}}</text>
+    </view>
+    
+    <!-- 兴趣爱好 -->
+    <view class="interests-section" wx:if="{{userInfo.interests && userInfo.interests.length > 0}}">
+      <text class="section-title">兴趣爱好</text>
+      <view class="interests-list">
+        <text class="interest-tag" wx:for="{{userInfo.interests}}" wx:key="index">{{item}}</text>
+      </view>
+    </view>
+    
+    <!-- 个人标签 -->
+    <view class="tags-section" wx:if="{{userInfo.tags && userInfo.tags.length > 0}}">
+      <text class="section-title">个人标签</text>
+      <view class="tags-list">
+        <text class="tag" wx:for="{{userInfo.tags}}" wx:key="index">{{item}}</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 操作按钮 -->
+  <view class="action-section">
+    <!-- 自己的资料 -->
+    <view class="own-actions" wx:if="{{isOwnProfile}}">
+      <view class="action-item" bindtap="editProfile">
+        <image src="https://picsum.photos/40/40" class="action-icon"></image>
+        <text>编辑资料</text>
+      </view>
+      <view class="action-item" bindtap="setMatchPreferences">
+        <image src="https://picsum.photos/40/40" class="action-icon"></image>
+        <text>匹配偏好</text>
+      </view>
+      <view class="action-item" bindtap="setPrivacySettings">
+        <image src="https://picsum.photos/40/40" class="action-icon"></image>
+        <text>隐私设置</text>
+      </view>
+      <view class="action-item" bindtap="viewMessages">
+        <image src="https://picsum.photos/40/40" class="action-icon"></image>
+        <text>我的消息</text>
+      </view>
+      <view class="action-item" bindtap="viewActivities">
+        <image src="https://picsum.photos/40/40" class="action-icon"></image>
+        <text>我的活动</text>
+      </view>
+    </view>
+    
+    <!-- 他人的资料 -->
+    <view class="other-actions" wx:if="{{!isOwnProfile}}">
+      <button class="btn-primary" bindtap="startChat">开始聊天</button>
+    </view>
+  </view>
+</view>

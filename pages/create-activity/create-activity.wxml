@@ -1,0 +1,130 @@
+<!-- pages/create-activity/create-activity.wxml -->
+<view class="container">
+  <!-- 表单容器 -->
+  <view class="form-container">
+    <!-- 活动标题 -->
+    <view class="form-item">
+      <text class="label">活动标题</text>
+      <input 
+        class="input" 
+        value="{{title}}" 
+        bindinput="onTitleInput" 
+        placeholder="请输入活动标题（20字以内）" 
+        placeholder-class="placeholder"
+        maxlength="20"
+      />
+    </view>
+    
+    <!-- 活动分类 -->
+    <view class="form-item">
+      <text class="label">活动分类</text>
+      <picker bindchange="onCategoryChange" range="{{categories}}" value="{{categories.indexOf(category)}}">
+        <view class="picker">
+          <text class="picker-text">{{category || '请选择活动分类'}}</text>
+        </view>
+      </picker>
+    </view>
+    
+    <!-- 活动时间 -->
+    <view class="form-item">
+      <text class="label">活动时间</text>
+      <view class="time-picker" bindtap="showDatePicker">
+        <text class="picker-text">{{time || '请选择活动时间'}}</text>
+        <text class="arrow">▶</text>
+      </view>
+    </view>
+    
+    <!-- 活动地点 -->
+    <view class="form-item">
+      <text class="label">活动地点</text>
+      <input 
+        class="input" 
+        value="{{location}}" 
+        bindinput="onLocationInput" 
+        placeholder="请输入活动地点" 
+        placeholder-class="placeholder"
+      />
+    </view>
+    
+    <!-- 最大人数 -->
+    <view class="form-item">
+      <text class="label">最大人数</text>
+      <picker mode="selector" range="[2, 5, 10, 20, 30, 50]" bindchange="onMaxParticipantsChange" value="{{[maxParticipants === 2 ? 0 : maxParticipants === 5 ? 1 : maxParticipants === 10 ? 2 : maxParticipants === 20 ? 3 : maxParticipants === 30 ? 4 : 5]}}">
+        <view class="picker">
+          <text class="picker-text">{{maxParticipants}}人</text>
+        </view>
+      </picker>
+    </view>
+    
+    <!-- 活动描述 -->
+    <view class="form-item">
+      <text class="label">活动描述</text>
+      <textarea 
+        class="textarea" 
+        value="{{description}}" 
+        bindinput="onDescriptionInput" 
+        placeholder="请详细描述活动内容、流程、注意事项等" 
+        placeholder-class="placeholder"
+        maxlength="500"
+        auto-height
+      />
+    </view>
+    
+    <!-- 活动图片 -->
+    <view class="form-item">
+      <text class="label">活动图片</text>
+      <view class="image-uploader">
+        <!-- 图片预览 -->
+        <view 
+          class="image-item" 
+          wx:for="{{images}}" 
+          wx:key="index"
+          wx:for-item="image"
+        >
+          <image 
+            class="image-preview" 
+            src="{{image}}" 
+            mode="aspectFill" 
+            data-index="{{index}}" 
+            bindtap="previewImage"
+          ></image>
+          <view 
+            class="image-delete" 
+            data-index="{{index}}" 
+            bindtap="deleteImage"
+          >
+            <text>×</text>
+          </view>
+        </view>
+        
+        <!-- 添加图片按钮 -->
+        <view class="add-image-btn" bindtap="uploadImage" wx:if="{{images.length < 9}}">
+          <text>+</text>
+        </view>
+      </view>
+      <text class="image-tips">最多上传9张图片，建议上传清晰的活动相关图片</text>
+    </view>
+  </view>
+  
+  <!-- 提交按钮 -->
+  <view class="submit-container">
+    <button 
+      class="submit-btn" 
+      type="primary" 
+      disabled="{{isSubmitting}}"
+      bindtap="createActivity"
+    >
+      {{isSubmitting ? '创建中...' : '创建活动'}}
+    </button>
+  </view>
+  
+  <!-- 日期选择器 -->
+  <picker-view 
+    class="date-picker" 
+    wx:if="{{showDatePicker}}"
+    value="{{dateValue}}"
+    bindchange="onDateChange"
+    fields="day"
+    bindcancel="cancelDatePicker"
+  />
+</view>

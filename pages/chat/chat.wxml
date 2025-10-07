@@ -1,0 +1,147 @@
+<!-- pages/chat/chat.wxml -->
+<view class="container">
+  <!-- 引入AI聊天助手组件 -->
+  <ai-chat-assistant 
+    id="ai-chat-assistant"
+    chat-history="{{messages}}"
+    target-user-info="{{userInfo}}"
+    bind:replyselect="onReplySelect"
+  />
+
+  <!-- 聊天记录区域 -->
+  <scroll-view 
+    id="message-container"
+    class="message-container"
+    scroll-y="true"
+    scroll-top="{{scrollTop}}"
+    bindscroll="onScroll"
+  >
+    <!-- 加载中 -->
+    <view class="loading" wx:if="{{isLoading}}">
+      <text>加载中...</text>
+    </view>
+    
+    <!-- 消息列表 -->
+    <view class="message-list">
+      <!-- 对方消息 -->
+      <view 
+        class="message-item other-message" 
+        wx:for="{{messages}}" 
+        wx:key="_id"
+        wx:if="{{item.senderId !== app.globalData.userInfo.id}}"
+      >
+        <image 
+          class="avatar" 
+          src="{{userInfo.avatar || 'https://picsum.photos/100/100'}}" 
+          mode="aspectFill"
+        ></image>
+        <view class="message-content">
+          <!-- 文本消息 -->
+          <view class="message-bubble" wx:if="{{item.type === 'text'}}">
+            <text class="message-text">{{item.content}}</text>
+          </view>
+          <!-- 图片消息 -->
+          <view class="message-bubble" wx:elif="{{item.type === 'image'}}">
+            <image 
+              class="message-image" 
+              src="{{item.content}}" 
+              mode="aspectFit"
+              bindtap="previewImage"
+              data-src="{{item.content}}"
+            ></image>
+          </view>
+          <!-- 时间 -->
+          <text class="message-time">{{formatTime(item.timestamp)}}</text>
+        </view>
+      </view>
+      
+      <!-- 我的消息 -->
+      <view 
+        class="message-item my-message" 
+        wx:for="{{messages}}" 
+        wx:key="_id"
+        wx:if="{{item.senderId === app.globalData.userInfo.id}}"
+      >
+        <view class="message-content">
+          <!-- 文本消息 -->
+          <view class="message-bubble" wx:if="{{item.type === 'text'}}">
+            <text class="message-text">{{item.content}}</text>
+          </view>
+          <!-- 图片消息 -->
+          <view class="message-bubble" wx:elif="{{item.type === 'image'}}">
+            <image 
+              class="message-image" 
+              src="{{item.content}}" 
+              mode="aspectFit"
+              bindtap="previewImage"
+              data-src="{{item.content}}"
+            ></image>
+          </view>
+          <!-- 时间 -->
+          <text class="message-time">{{formatTime(item.timestamp)}}</text>
+        </view>
+        <image 
+          class="avatar" 
+          src="{{app.globalData.userInfo.avatar || 'https://picsum.photos/100/100'}}" 
+          mode="aspectFill"
+        ></image>
+      </view>
+    </view>
+    
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{!isLoading && messages.length === 0}}">
+      <text>开始你们的聊天吧</text>
+    </view>
+  </scroll-view>
+  
+  <!-- 输入区域 -->
+  <view class="input-container">
+    <!-- AI助手按钮 -->
+    <view class="input-tool" bindtap="toggleAIAssistant">
+      <image src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007aff'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/%3E%3C/svg%3E" mode="aspectFit" class="tool-icon" />
+    </view>
+    
+    <!-- 表情按钮 -->
+    <view class="input-tool" bindtap="showEmojiPanel">
+      <text class="tool-icon">😊</text>
+    </view>
+    
+    <!-- 图片按钮 -->
+    <view class="input-tool" bindtap="showImagePicker">
+      <text class="tool-icon">📷</text>
+    </view>
+    
+    <!-- 输入框 -->
+    <view class="input-wrapper">
+      <input 
+        class="input" 
+        value="{{inputValue}}" 
+        bindinput="onInput"
+        placeholder="输入消息..."
+        placeholder-class="placeholder"
+        confirm-type="send"
+        bindconfirm="sendMessage"
+      />
+    </view>
+    
+    <!-- 发送按钮 -->
+    <button 
+      class="send-btn" 
+      type="primary" 
+      size="mini" 
+      disabled="{{!inputValue.trim() || isSending}}"
+      bindtap="sendMessage"
+    >
+      发送
+    </button>
+  </view>
+  
+  <!-- 表情面板 -->
+  <view class="emoji-panel" wx:if="{{showEmoji}}">
+    <view class="emoji-list">
+      <view class="emoji-item" wx:for="{{['😊', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '😋', '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓', '😎', '🤩', '🥳', '😏', '😒', '😞', '😔', '😟', '😕', '🙁']}}" wx:key="index" bindtap="selectEmoji" data-emoji="{{item}}">
+        <text>{{item}}</text>
+      </view>
+    </view>
+  </view>
+</view>

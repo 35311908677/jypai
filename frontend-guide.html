@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交友π - 微信小程序前端指南</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #ff6b81;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #ff6b81;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        h3 {
+            color: #555;
+            margin-top: 30px;
+        }
+        p {
+            margin-bottom: 20px;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin-bottom: 20px;
+        }
+        .note {
+            background-color: #fff9e6;
+            padding: 15px;
+            border-left: 4px solid #ffcc00;
+            margin-bottom: 20px;
+        }
+        .success {
+            background-color: #e6f7e6;
+            padding: 15px;
+            border-left: 4px solid #00cc66;
+            margin-bottom: 20px;
+        }
+        .warning {
+            background-color: #fff2e6;
+            padding: 15px;
+            border-left: 4px solid #ff9900;
+            margin-bottom: 20px;
+        }
+        .file-tree {
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>交友π - 微信小程序前端指南</h1>
+    
+    <div class="note">
+        <p>这是一个微信小程序项目，需要使用<strong>微信开发者工具</strong>来运行，而不是直接在浏览器中打开。</p>
+    </div>
+    
+    <h2>项目结构</h2>
+    <p>前端项目结构如下：</p>
+    <div class="file-tree">
+├── app.js                # 应用程序入口文件
+├── app.json              # 全局配置文件
+├── app.wxss              # 全局样式文件
+├── pages/                # 页面目录
+│   ├── login/            # 登录页面
+│   ├── index/            # 首页/匹配页面
+│   ├── profile/          # 个人资料页面
+│   ├── message-list/     # 消息列表页面
+│   ├── chat/             # 聊天页面
+│   ├── activity-list/    # 活动列表页面
+│   └── ...
+├── utils/                # 工具函数目录
+│   └── request.js        # 网络请求工具
+└── project.config.json   # 项目配置文件
+    </div>
+    
+    <h2>如何运行微信小程序</h2>
+    
+    <h3>步骤 1: 下载并安装微信开发者工具</h3>
+    <p>从<a href="https://developers.weixin.qq.com/miniprogram/en/dev/devtools/download.html" target="_blank">微信开发者工具官网</a>下载并安装最新版本的微信开发者工具。</p>
+    
+    <h3>步骤 2: 导入项目</h3>
+    <ol>
+        <li>打开微信开发者工具</li>
+        <li>登录您的微信账号</li>
+        <li>点击"导入项目"按钮</li>
+        <li>填写项目信息：
+            <ul>
+                <li>项目名称：交友π</li>
+                <li>目录：选择项目根目录（c:\Users\35319\Desktop\交友π）</li>
+                <li>AppID：可以使用测试号（点击"使用测试号"）</li>
+            </ul>
+        </li>
+        <li>点击"确定"按钮导入项目</li>
+    </ol>
+    
+    <h3>步骤 3: 启动项目</h3>
+    <p>导入成功后，微信开发者工具会自动编译并运行项目。您可以在模拟器中查看和测试应用。</p>
+    
+    <h2>项目功能</h2>
+    <p>交友π小程序包含以下主要功能：</p>
+    <ul>
+        <li><strong>用户登录</strong>：微信一键登录</li>
+        <li><strong>用户匹配</strong>：基于兴趣和偏好的智能匹配</li>
+        <li><strong>即时通讯</strong>：与匹配用户进行聊天</li>
+        <li><strong>活动管理</strong>：浏览、创建和参与线下活动</li>
+        <li><strong>个人资料</strong>：管理个人信息和偏好设置</li>
+    </ul>
+    
+    <h2>后端服务</h2>
+    <div class="success">
+        <p>后端服务已成功启动并运行在 <strong>http://localhost:3000</strong></p>
+        <p>测试端点：<a href="http://localhost:3000/api/users/test" target="_blank">http://localhost:3000/api/users/test</a></p>
+    </div>
+    
+    <div class="warning">
+        <p><strong>注意：</strong>MongoDB数据库连接失败，这是因为本地MongoDB服务未启动。虽然应用程序会继续运行，但需要数据库的功能可能不可用。</p>
+        <p>如果需要使用完整功能，请先启动本地MongoDB服务（端口27017）。</p>
+    </div>
+    
+    <h2>常见问题</h2>
+    <h3>为什么我看不到前端界面？</h3>
+    <p>这是一个微信小程序项目，必须使用微信开发者工具来运行，不能直接在浏览器中打开。请按照上述步骤安装并使用微信开发者工具。</p>
+    
+    <h3>登录失败怎么办？</h3>
+    <p>确保后端服务正在运行（端口3000），然后检查微信开发者工具中的控制台输出，查看具体的错误信息。</p>
+    
+    <h3>如何修改项目配置？</h3>
+    <p>可以通过修改 <code>app.json</code> 文件来配置页面路径、窗口样式和tabBar等。</p>
+    
+    <div class="success">
+        <p style="text-align: center;"><strong>祝您使用愉快！如有任何问题，请联系开发人员。</strong></p>
+    </div>
+</body>
+</html>

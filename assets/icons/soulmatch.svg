@@ -1,0 +1,24 @@
+<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!-- 外圆环渐变定义 -->
+<defs>
+<linearGradient id="outerRingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" stop-color="#8A2BE2"/>
+<stop offset="50%" stop-color="#9932CC"/>
+<stop offset="100%" stop-color="#7B68EE"/>
+</linearGradient>
+<!-- 心形渐变定义 -->
+<linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" stop-color="#FFD700"/>
+<stop offset="50%" stop-color="#FFA500"/>
+<stop offset="100%" stop-color="#FFD700"/>
+</linearGradient>
+</defs>
+<!-- 外圆环 -->
+<path d="M18 2C9.2 2 2 9.2 2 18C2 26.8 9.2 34 18 34C26.8 34 34 26.8 34 18C34 9.2 26.8 2 18 2Z" stroke="url(#outerRingGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<!-- 发光效果 -->
+<path d="M18 3C8.6 3 1 10.6 1 19C1 27.4 8.6 35 18 35C27.4 35 35 27.4 35 19C35 10.6 27.4 3 18 3Z" stroke="#9932CC" stroke-width="1" fill="none" opacity="0.3" filter="blur(3px)"/>
+<!-- 中心心形 -->
+<path d="M18 7L19 13L25 13L20.5 17L22 23L18 19.5L14 23L15.5 17L11 13L17 13L18 7Z" fill="url(#heartGradient)"/>
+<!-- 心形高光 -->
+<path d="M18 8L18.5 11L20 11L19 13L19.5 15L18 14L16.5 15L17 13L16 11L17.5 11L18 8Z" fill="white" opacity="0.5"/>
+</svg>
